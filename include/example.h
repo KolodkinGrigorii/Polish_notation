@@ -5,7 +5,7 @@ class Lexema {
 private:
 	int type;//1-число, 2-плюс, 3-бинарный минус, 4-умножение, 5-деление, 6-лс, 7-пс
 	int pr;
-	int val;
+	double val;
 public:
 	Lexema() {
 		type = 0;
@@ -49,6 +49,15 @@ public:
 		pr = v.pr;
 		val = v.val;
 		return *this;
+	}
+	int gettype(Lexema c) {
+		return c.type;
+	}
+	int getval(Lexema c) {
+		return c.val;
+	}
+	int getpr(Lexema c) {
+		return c.pr;
 	}
 	friend std::ostream& operator<<(std::ostream& out, const Lexema& v)
 	{

@@ -1,10 +1,13 @@
 #include <iostream>
 #include "example.h"
 #include "string.h"
+#include <stack>
+#include <queue>
 using namespace std;
 int main() {
-	string s = "-1+2*66*(6+(-86))+3+4";
-	int a = strlen("-1+2*66*(6+(-86))+3+4");
+	string s;
+	getline(cin, s);
+	int a = s.size();
 	int i = 0;
 	Lexema* ar;
 	ar = new Lexema[a];
@@ -56,6 +59,66 @@ int main() {
 		}
 	}
 	for (int i = 0; i < l; i++) {
-		cout << ar[i];
+		cout << ar[i]<< ' ';
 	}
+	queue<Lexema> polish_notation;
+	stack<Lexema> operations;
+	for (int i = 0; i < l; i++) {
+		if (ar[i].gettype(ar[i]) == 1) {
+			polish_notation.push(ar[i]);
+		}
+		if (ar[i].gettype(ar[i]) != 1) {
+			if (operations.size() != 0 && (operations.top().getpr(operations.top()) < ar[i].getpr(ar[i]))) {
+				while (operations.size()!=0) {
+					polish_notation.push(operations.top());
+					operations.pop();
+				}
+				operations.push(ar[i]);
+			}
+			else {
+				operations.push(ar[i]);
+			}
+		}
+	}
+	while (operations.size() != 0) {
+		polish_notation.push(operations.top());
+		operations.pop();
+	}
+	stack<double> calc;
+	while (polish_notation.size() != 0) {
+		if (polish_notation.front().gettype(polish_notation.front()) == 1) {
+			calc.push(polish_notation.front().getval(polish_notation.front()));
+			polish_notation.pop();
+		}
+		else if (polish_notation.front().gettype(polish_notation.front()) != 1) {
+			double a;
+			double b;
+			a = calc.top();
+			calc.pop();
+			b = calc.top();
+			calc.pop();
+			if (polish_notation.front().gettype(polish_notation.front()) == 2) {
+				double c;
+				c = a + b;
+				calc.push(c);
+			}
+			if (polish_notation.front().gettype(polish_notation.front()) == 3) {
+				double c;
+				c = b - a;
+				calc.push(c);
+			}
+			if (polish_notation.front().gettype(polish_notation.front()) == 4) {
+				double c;
+				c = a * b;
+				calc.push(c);
+			}
+			if (polish_notation.front().gettype(polish_notation.front()) == 5) {
+				double c;
+				c = b / a;
+				calc.push(c);
+			}
+			polish_notation.pop();
+		}
+	}
+	cout << calc.top();
 }

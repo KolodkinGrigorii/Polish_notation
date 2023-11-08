@@ -1,3 +1,3 @@
-C:/Users/Григорий/Polish_notation/build/CMakeFiles/polish_notation.dir
-C:/Users/Григорий/Polish_notation/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Григорий/Polish_notation/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/s22380292/Polish_notation/build/CMakeFiles/polish_notation.dir
+C:/Users/s22380292/Polish_notation/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/s22380292/Polish_notation/build/CMakeFiles/ZERO_CHECK.dir
