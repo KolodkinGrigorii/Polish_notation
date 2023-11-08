@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/s22380292/polish_notation
+# Install script for directory: C:/Users/Григорий/Polish_notation
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/s22380292/polish_notation/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Григорий/Polish_notation/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
