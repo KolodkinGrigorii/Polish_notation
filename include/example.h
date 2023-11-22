@@ -20,11 +20,11 @@ public:
 	Lexema(char s) {
 		if (s == '(') {
 			type = 6;
-			pr = 0;
+			pr = 99;
 		}
 		else if (s == ')') {
 			type = 7;
-			pr = 0;
+			pr = 99;
 		}
 		else if (s == '+') {
 			type = 2;

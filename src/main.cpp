@@ -68,12 +68,19 @@ int main() {
 			polish_notation.push(ar[i]);
 		}
 		if (ar[i].gettype(ar[i]) != 1) {
-			if (operations.size() != 0 && (operations.top().getpr(operations.top()) < ar[i].getpr(ar[i]))) {
-				while (operations.size()!=0) {
+			if ((ar[i].gettype(ar[i]) != 6) && (ar[i].gettype(ar[i]) != 7) && (operations.size() != 0) && (operations.top().getpr(operations.top()) < ar[i].getpr(ar[i]))) {
+				while ((operations.size()!=0) && (operations.top().gettype(operations.top())!=6)) {
 					polish_notation.push(operations.top());
 					operations.pop();
 				}
 				operations.push(ar[i]);
+			}
+			else if (ar[i].gettype(ar[i]) == 7) {
+				while (operations.top().gettype(operations.top()) != 6) {
+					polish_notation.push(operations.top());
+					operations.pop();
+				}
+				operations.pop();
 			}
 			else {
 				operations.push(ar[i]);
