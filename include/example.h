@@ -33,23 +33,23 @@ public:
 		}
 		else if (s == '+') {
 			type = 2;
-			pr = 2;
+			pr = 4;
 		}
 		else if (s == '-') {
 			type = 3;
-			pr = 2;
+			pr = 3;
 		}
 		else if (s == '*') {
 			type = 4;
-			pr = 1;
+			pr = 2;
 		}
 		else if (s == '/') {
 			type = 5;
-			pr = 1;
+			pr = 2;
 		}
 		else if (s == '^') {
 			type = 8;
-			pr = 0;
+			pr = 1;
 		}
 	}
 	Lexema(string s) {
@@ -155,12 +155,12 @@ int getSt(Lexema c) {
 		return 1;
 	}
 }
-void chstring(Lexema *ar) {
+void chstring(Lexema* ar, int c) {
 	int scounter = 0;
-	int a = sizeof(ar)/4;
+	int a = c;
 	int i = 0;
+	int CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
 	while (i < a) {
-		int CurrentStatus = 0;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
 		if (i == 0 && getSt(ar[i]) == 1) {
 			CurrentStatus = 1;
 		}
@@ -168,52 +168,59 @@ void chstring(Lexema *ar) {
 			scounter++;
 			CurrentStatus = 4;
 		}
-		else if (i==0){
-			throw 'FALL';
-		}
-		else if (i!=0){
-			if (CurrentStatus == 1 && (getSt(ar[i]) == 1 || getSt(ar[i]) == 4)) {
-				throw 'FALL';
-			}
-			else if (CurrentStatus == 1 && getSt(ar[i]) == 5) {
-				scounter--;
-				CurrentStatus = 5;
-			}
-			else if (CurrentStatus == 1 && getSt(ar[i]) == 3) {
-				CurrentStatus =3;
-			}
-			if (CurrentStatus == 3 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i + 1 == a)) {
-				throw 'FALL';
-			}
-			else if (CurrentStatus == 3 && getSt(ar[i]) == 4) {
-				scounter++;
-				CurrentStatus = 4;
-			}
-			else if (CurrentStatus == 3) {
-				CurrentStatus = getSt(ar[i]);
-			}
-			if (CurrentStatus == 4 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i+1==a)) {
-				throw 'FALL';
-			}
-			else if (CurrentStatus == 4 && getSt(ar[i]) == 4) {
-				scounter++;
-				CurrentStatus = 4;
-			}
-			else if (CurrentStatus == 4) {
-				CurrentStatus = getSt(ar[i]);
-			}
-			if (CurrentStatus == 5 && ((getSt(ar[i]) == 4 || getSt(ar[i]) == 1) ||  (i+1==a && scounter!=0))) {
-				throw 'FALL';
-			}
-			else if (CurrentStatus == 5 && getSt(ar[i]) == 5) {
-				scounter--;
-				if (scounter < 0) {
+		else if (i!=0) {
+			if (CurrentStatus == 1) {
+				if (CurrentStatus == 1 && ((getSt(ar[i]) == 1) || (getSt(ar[i]) == 4))) {
 					throw 'FALL';
 				}
-				CurrentStatus = 4;
+				else if (CurrentStatus == 1 && getSt(ar[i]) == 5) {
+					scounter--;
+					CurrentStatus = 5;
+				}
+				else if (CurrentStatus == 1 && getSt(ar[i]) == 3) {
+					CurrentStatus = 3;
+				}
+			}
+			else if (CurrentStatus == 3) {
+				if (CurrentStatus == 3 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i == a)) {
+					throw 'FALL';
+				}
+				else if (CurrentStatus == 3 && getSt(ar[i]) == 4) {
+					scounter++;
+					CurrentStatus = 4;
+				}
+				else if (CurrentStatus == 3) {
+					CurrentStatus = getSt(ar[i]);
+				}
+			}
+			else if (CurrentStatus == 4) {
+				if (CurrentStatus == 4 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i == a)) {
+					throw 'FALL';
+				}
+				else if (CurrentStatus == 4 && getSt(ar[i]) == 4) {
+					scounter++;
+					CurrentStatus = 4;
+				}
+				else if (CurrentStatus == 4) {
+					CurrentStatus = getSt(ar[i]);
+				}
 			}
 			else if (CurrentStatus == 5) {
-				CurrentStatus = getSt(ar[i]);
+				if (CurrentStatus == 5 && ((getSt(ar[i]) == 4 || getSt(ar[i]) == 1))) {
+					throw 'FALL';
+				}
+				else if (CurrentStatus == 5 && getSt(ar[i]) == 5) {
+					scounter--;
+					CurrentStatus = 5;
+				}
+				else if (CurrentStatus == 5) {
+					CurrentStatus = getSt(ar[i]);
+				}
+			}
+		}
+		if (i == a - 1) {
+			if (scounter != 0) {
+				throw 'FALL';
 			}
 		}
 		i++;

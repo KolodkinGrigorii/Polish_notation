@@ -18,14 +18,20 @@ int main() {
 			int un;
 			char c;
 			double num;
-			if ((i > 0 && s[i] == '-' && s[i - 1] == '(') || (i == 0 && s[0] == '-') || ((i != 0) && ((s[i] == '-') && ((s[i - 1] == '+') || (s[i - 1] == '-') || (s[i - 1] == '*') || (s[i - 1] == '/'))))) {
+			if ((i > 0 && s[i] == '-' && s[i - 1] == '(') || (i == 0 && s[0] == '-')) {
 				double c = -1;
 				ar[l] = Lexema(c);
 				ar[l + 1] = Lexema('*');
 				l = l + 2;
 				i = i + 1;
 			}
-			else if (s[i] == '1' || s[i] == '2' || s[i] == '3' || s[i] == '4' || s[i] == '5' || s[i] == '6' || s[i] == '7' || s[i] == '8' || s[i] == '9' || s[i] == '0') {
+			if (s[i] == '0') {
+				num = 0;
+				ar[l] = Lexema(num);
+				i = i + 1;
+				l = l + 1;
+			}
+			else if (s[i] == '1' || s[i] == '2' || s[i] == '3' || s[i] == '4' || s[i] == '5' || s[i] == '6' || s[i] == '7' || s[i] == '8' || s[i] == '9') {
 				int j = i;
 				int raz = 0;
 				while ((s[j] == '1' || s[j] == '2' || s[j] == '3' || s[j] == '4' || s[j] == '5' || s[j] == '6' || s[j] == '7' || s[j] == '8' || s[j] == '9' || s[j] == '0') && (j < a)) {
@@ -93,7 +99,7 @@ int main() {
 				throw 'FALL';
 			}
 		}
-		chstring(ar);
+		chstring(ar, l);
 		queue<Lexema> polish_notation;
 		stack<Lexema> operations;
 		for (int i = 0; i < l; i++) {
