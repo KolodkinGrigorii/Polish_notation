@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\s22380292\Polish_notation\src\main.cpp">
+    <ClCompile Include="C:\Users\Григорий\Polish_notation\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\s22380292\Polish_notation\include\example.h">
+    <ClInclude Include="C:\Users\Григорий\Polish_notation\include\example.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\s22380292\Polish_notation\CMakelists.txt" />
+    <CustomBuild Include="C:\Users\Григорий\Polish_notation\CMakelists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{2AD9B9CD-8E0E-370A-BD1B-3B69146AB4D3}</UniqueIdentifier>
+      <UniqueIdentifier>{9EEC02BD-41D8-371F-8FE6-87475F426E9D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{7349C98B-27C2-3C68-838B-643BE81F54ED}</UniqueIdentifier>
+      <UniqueIdentifier>{AE3EB598-8B16-3D6B-A0B6-BC2554C76227}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
