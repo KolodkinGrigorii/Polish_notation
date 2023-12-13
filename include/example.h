@@ -165,7 +165,10 @@ void chstring(Lexema* ar, int c) {
 	int i = 0;
 	Type CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
 	while (i < a) {
-		if (i == 0 && (getSt(ar[i]) == number || getSt(ar[i])==un_op)) {
+		if (i == 0 && getSt(ar[i]) == un_op && i == a - 1) {
+			throw 'FALL';
+		}
+		else if (i == 0 && (getSt(ar[i]) == number || getSt(ar[i])==un_op)) {
 			CurrentStatus = getSt(ar[i]);
 		}
 		else if (i == 0 && getSt(ar[i]) == lefts) {
