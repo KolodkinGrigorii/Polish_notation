@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 using namespace std;
+enum Type{number, un_op, bin_op, lefts, rights};
 class Lexema {
 private:
 	int type;//1-число, 2-плюс, 3-бинарный минус, 4-умножение, 5-деление, 6-лс, 7-пс
@@ -141,95 +142,95 @@ public:
 		return out;
 	}
 };
-int getSt(Lexema c) {
+Type getSt(Lexema c) {
 	if (c.gettype(c)==2 || c.gettype(c) == 3 || c.gettype(c) == 4 || c.gettype(c) == 5 || c.gettype(c)==8) {
-		return 3;
+		return bin_op;
 	}
 	else if (c.gettype(c) == 6){
-		return 4;
+		return lefts;
 	}
 	else if (c.gettype(c) == 7) {
-		return 5;
+		return rights;
 	}
 	else if (c.gettype(c) == 9 || c.gettype(c) == 10 || c.gettype(c) == 11 || c.gettype(c) == 12 || c.gettype(c) == 13 || c.gettype(c) == 14) {
-		return 2;
+		return un_op;
 	}
 	else{
-		return 1;
+		return number;
 	}
 }
 void chstring(Lexema* ar, int c) {
 	int scounter = 0;
 	int a = c;
 	int i = 0;
-	int CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
+	Type CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
 	while (i < a) {
-		if (i == 0 && (getSt(ar[i]) == 1 || getSt(ar[i])==2)) {
+		if (i == 0 && (getSt(ar[i]) == number || getSt(ar[i])==un_op)) {
 			CurrentStatus = getSt(ar[i]);
 		}
-		else if (i == 0 && getSt(ar[i]) == 4) {
+		else if (i == 0 && getSt(ar[i]) == lefts) {
 			scounter++;
-			CurrentStatus = 4;
+			CurrentStatus = lefts;
 		}
 		else if (i == 0) {
 			throw 'FALL';
 		}
 		else if (i!=0) {
-			if (CurrentStatus == 1) {
-				if (CurrentStatus == 1 && ((getSt(ar[i]) == 1) || (getSt(ar[i]) == 4))) {
+			if (CurrentStatus == number) {
+				if ((getSt(ar[i]) == number) || (getSt(ar[i]) == lefts)) {
 					throw 'FALL';
 				}
-				else if (CurrentStatus == 1 && getSt(ar[i]) == 5) {
+				else if (getSt(ar[i]) == rights) {
 					scounter--;
-					CurrentStatus = 5;
+					CurrentStatus = rights;
 				}
-				else if (CurrentStatus == 1 && (getSt(ar[i]) == 3 || getSt(ar[i])==2)) {
+				else if (getSt(ar[i]) == bin_op || getSt(ar[i])==un_op) {
 					CurrentStatus = getSt(ar[i]);
 				}
 			}
-			else if (CurrentStatus == 3) {
-				if (CurrentStatus == 3 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i == a)) {
+			else if (CurrentStatus == bin_op) {
+				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) || i == a) {
 					throw 'FALL';
 				}
-				else if (CurrentStatus == 3 && getSt(ar[i]) == 4) {
+				else if (getSt(ar[i]) == lefts) {
 					scounter++;
-					CurrentStatus = 4;
+					CurrentStatus = lefts;
 				}
-				else if (CurrentStatus == 3) {
+				else if (CurrentStatus == bin_op) {
 					CurrentStatus = getSt(ar[i]);
 				}
 			}
-			else if (CurrentStatus == 4) {
-				if (CurrentStatus == 4 && ((getSt(ar[i]) == 3 || getSt(ar[i]) == 5) || i == a)) {
+			else if (CurrentStatus == lefts) {
+				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) || i == a) {
 					throw 'FALL';
 				}
-				else if (CurrentStatus == 4 && getSt(ar[i]) == 4) {
+				else if (getSt(ar[i]) == lefts) {
 					scounter++;
-					CurrentStatus = 4;
+					CurrentStatus = lefts;
 				}
-				else if (CurrentStatus == 4) {
+				else if (CurrentStatus == lefts) {
 					CurrentStatus = getSt(ar[i]);
 				}
 			}
-			else if (CurrentStatus == 5) {
-				if (CurrentStatus == 5 && ((getSt(ar[i]) == 4 || getSt(ar[i]) == 1))) {
+			else if (CurrentStatus == rights) {
+				if (getSt(ar[i]) == lefts || getSt(ar[i]) == number) {
 					throw 'FALL';
 				}
-				else if (CurrentStatus == 5 && getSt(ar[i]) == 5) {
+				else if (getSt(ar[i]) == rights) {
 					scounter--;
-					CurrentStatus = 5;
+					CurrentStatus = rights;
 				}
-				else if (CurrentStatus == 5 && getSt(ar[i])==3) {
+				else if (getSt(ar[i])==bin_op) {
 					CurrentStatus = getSt(ar[i]);
 				}
 				else {
 					throw 'FALL';
 				}
 			}
-			else if (CurrentStatus == 2) {
-				if (getSt(ar[i]) == 4) {
+			else if (CurrentStatus == un_op) {
+				if (getSt(ar[i]) == lefts) {
 					scounter++;
-					CurrentStatus = 4;
+					CurrentStatus = lefts;
 				}
 				else {
 					throw 'FALL';
