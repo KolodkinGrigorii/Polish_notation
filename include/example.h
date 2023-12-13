@@ -151,6 +151,9 @@ int getSt(Lexema c) {
 	else if (c.gettype(c) == 7) {
 		return 5;
 	}
+	else if (c.gettype(c) == 9 || c.gettype(c) == 10 || c.gettype(c) == 11 || c.gettype(c) == 12 || c.gettype(c) == 13 || c.gettype(c) == 14) {
+		return 2;
+	}
 	else{
 		return 1;
 	}
@@ -161,12 +164,15 @@ void chstring(Lexema* ar, int c) {
 	int i = 0;
 	int CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
 	while (i < a) {
-		if (i == 0 && getSt(ar[i]) == 1) {
-			CurrentStatus = 1;
+		if (i == 0 && (getSt(ar[i]) == 1 || getSt(ar[i])==2)) {
+			CurrentStatus = getSt(ar[i]);
 		}
 		else if (i == 0 && getSt(ar[i]) == 4) {
 			scounter++;
 			CurrentStatus = 4;
+		}
+		else if (i == 0) {
+			throw 'FALL';
 		}
 		else if (i!=0) {
 			if (CurrentStatus == 1) {
@@ -177,8 +183,8 @@ void chstring(Lexema* ar, int c) {
 					scounter--;
 					CurrentStatus = 5;
 				}
-				else if (CurrentStatus == 1 && getSt(ar[i]) == 3) {
-					CurrentStatus = 3;
+				else if (CurrentStatus == 1 && (getSt(ar[i]) == 3 || getSt(ar[i])==2)) {
+					CurrentStatus = getSt(ar[i]);
 				}
 			}
 			else if (CurrentStatus == 3) {
@@ -213,8 +219,20 @@ void chstring(Lexema* ar, int c) {
 					scounter--;
 					CurrentStatus = 5;
 				}
-				else if (CurrentStatus == 5) {
+				else if (CurrentStatus == 5 && getSt(ar[i])==3) {
 					CurrentStatus = getSt(ar[i]);
+				}
+				else {
+					throw 'FALL';
+				}
+			}
+			else if (CurrentStatus == 2) {
+				if (getSt(ar[i]) == 4) {
+					scounter++;
+					CurrentStatus = 4;
+				}
+				else {
+					throw 'FALL';
 				}
 			}
 		}
