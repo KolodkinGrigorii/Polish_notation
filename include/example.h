@@ -1,81 +1,81 @@
 ﻿#include <iostream>
 #include <string>
 using namespace std;
-enum Type{number, un_op, bin_op, lefts, rights};
+enum Type{number, un_op, bin_op, lefts, rights, add, sub, mul, dvs, deg, sns, csn, ln, lg, tg, ctg};
 class Lexema {
 private:
-	int type;//1-число, 2-плюс, 3-бинарный минус, 4-умножение, 5-деление, 6-лс, 7-пс
+	Type type;//1-число, 2-плюс, 3-бинарный минус, 4-умножение, 5-деление, 6-лс, 7-пс
 	int pr;
 	double val;
 public:
 	Lexema() {
-		type = 0;
+		type = number;
 		pr = 9999;
 		val = 0;
 	}
 	Lexema(double s) {
-		type = 1;
+		type = number;
 		pr = 9999;
 		val = s;
 	}
 	Lexema(char s) {
 		if (s == 'e') {
-			type = 1;
+			type = number;
 			pr = 9999;
 			val = exp(1);
 		}
 		if (s == '(') {
-			type = 6;
+			type = lefts;
 			pr = 99;
 		}
 		else if (s == ')') {
-			type = 7;
+			type = rights;
 			pr = 99;
 		}
 		else if (s == '+') {
-			type = 2;
+			type = add;
 			pr = 4;
 		}
 		else if (s == '-') {
-			type = 3;
+			type = sub;
 			pr = 3;
 		}
 		else if (s == '*') {
-			type = 4;
+			type = mul;
 			pr = 2;
 		}
 		else if (s == '/') {
-			type = 5;
+			type = dvs;
 			pr = 2;
 		}
 		else if (s == '^') {
-			type = 8;
+			type = deg;
 			pr = 1;
 		}
 	}
 	Lexema(string s) {
 		if (s == "sin") {
-			type = 9;
+			type = sns;
 			pr = 0;
 		}
 		if (s == "cos") {
-			type = 10;
+			type = csn;
 			pr = 0;
 		}
 		if (s == "tg") {
-			type = 11;
+			type = tg;
 			pr = 0;
 		}
 		if (s == "ctg") {
-			type = 12;
+			type = ctg;
 			pr = 0;
 		}
 		if (s == "ln") {
-			type = 13;
+			type = ln;
 			pr = 0;
 		}
 		if (s == "lg") {
-			type = 14;
+			type = lg;
 			pr = 0;
 		}
 	}
@@ -86,7 +86,7 @@ public:
 		val = v.val;
 		return *this;
 	}
-	int gettype(Lexema c) {
+	Type gettype(Lexema c) {
 		return c.type;
 	}
 	double getval(Lexema c) {
@@ -100,62 +100,62 @@ public:
 		if (v.type==1) {
 			cout << v.val;
 		}
-		else if (v.type == 2) {
+		else if (v.type == add) {
 			cout << "+";
 		}
-		else if (v.type == 3) {
+		else if (v.type == sub) {
 			cout << "-";
 		}
-		else if (v.type == 4) {
+		else if (v.type == mul) {
 			cout << "*";
 		}
-		else if (v.type == 5) {
+		else if (v.type == dvs) {
 			cout << "/";
 		}
-		else if (v.type == 6) {
+		else if (v.type == lefts) {
 			cout << "(";
 		}
-		else if (v.type == 7) {
+		else if (v.type == rights) {
 			cout << ")";
 		}
-		else if (v.type == 8) {
+		else if (v.type == deg) {
 			cout << "^";
 		}
-		else if (v.type == 9) {
+		else if (v.type == sns) {
 			cout << "sin";
 		}
-		else if (v.type == 10) {
+		else if (v.type == csn) {
 			cout << "cos";
 		}
-		else if (v.type == 11) {
+		else if (v.type == tg) {
 			cout << "tg";
 		}
-		else if (v.type == 12) {
+		else if (v.type == ctg) {
 			cout << "ctg";
 		}
-		else if (v.type == 13) {
+		else if (v.type == ln) {
 			cout << "ln";
 		}
-		else if (v.type == 14) {
+		else if (v.type == lg) {
 			cout << "lg";
 		}
 		return out;
 	}
 };
 Type getSt(Lexema c) {
-	if (c.gettype(c)==2 || c.gettype(c) == 3 || c.gettype(c) == 4 || c.gettype(c) == 5 || c.gettype(c)==8) {
+	if (c.gettype(c) == add || c.gettype(c) == sub || c.gettype(c) == mul || c.gettype(c) == dvs || c.gettype(c) == deg) {
 		return bin_op;
 	}
-	else if (c.gettype(c) == 6){
-		return lefts;
-	}
-	else if (c.gettype(c) == 7) {
-		return rights;
-	}
-	else if (c.gettype(c) == 9 || c.gettype(c) == 10 || c.gettype(c) == 11 || c.gettype(c) == 12 || c.gettype(c) == 13 || c.gettype(c) == 14) {
+	else if (c.gettype(c) == sns || c.gettype(c) == csn || c.gettype(c) == tg || c.gettype(c) == ctg || c.gettype(c) == lg || c.gettype(c) == ln) {
 		return un_op;
 	}
-	else{
+	else if (c.gettype(c) == lefts) {
+		return lefts;
+	}
+	else if (c.gettype(c) == rights) {
+		return rights;
+	}
+	else {
 		return number;
 	}
 }
@@ -192,7 +192,7 @@ void chstring(Lexema* ar, int c) {
 				}
 			}
 			else if (CurrentStatus == bin_op) {
-				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) || i == a) {
+				if (getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) {
 					throw 'FALL';
 				}
 				else if (getSt(ar[i]) == lefts) {
@@ -204,7 +204,7 @@ void chstring(Lexema* ar, int c) {
 				}
 			}
 			else if (CurrentStatus == lefts) {
-				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) || i == a) {
+				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights)) {
 					throw 'FALL';
 				}
 				else if (getSt(ar[i]) == lefts) {
@@ -242,6 +242,9 @@ void chstring(Lexema* ar, int c) {
 		}
 		if (i == a - 1) {
 			if (scounter != 0) {
+				throw 'FALL';
+			}
+			if (CurrentStatus == bin_op || CurrentStatus == lefts) {
 				throw 'FALL';
 			}
 		}

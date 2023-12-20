@@ -103,19 +103,19 @@ int main() {
 		queue<Lexema> polish_notation;
 		stack<Lexema> operations;
 		for (int i = 0; i < l; i++) {
-			if (ar[i].gettype(ar[i]) == 1) {
+			if (ar[i].gettype(ar[i]) == number) {
 				polish_notation.push(ar[i]);
 			}
-			if (ar[i].gettype(ar[i]) != 1) {
-				if ((ar[i].gettype(ar[i]) != 6) && (ar[i].gettype(ar[i]) != 7) && (operations.size() != 0) && (operations.top().getpr(operations.top()) < ar[i].getpr(ar[i]))) {
-					while ((operations.size() != 0) && (operations.top().gettype(operations.top()) != 6)) {
+			if (ar[i].gettype(ar[i]) != number) {
+				if ((ar[i].gettype(ar[i]) != lefts) && (ar[i].gettype(ar[i]) != rights) && (operations.size() != 0) && (operations.top().getpr(operations.top()) < ar[i].getpr(ar[i]))) {
+					while ((operations.size() != 0) && (operations.top().gettype(operations.top()) != lefts)) {
 						polish_notation.push(operations.top());
 						operations.pop();
 					}
 					operations.push(ar[i]);
 				}
-				else if (ar[i].gettype(ar[i]) == 7) {
-					while (operations.top().gettype(operations.top()) != 6) {
+				else if (ar[i].gettype(ar[i]) == rights) {
+					while (operations.top().gettype(operations.top()) != lefts) {
 						polish_notation.push(operations.top());
 						operations.pop();
 					}
@@ -132,12 +132,12 @@ int main() {
 		}
 		stack<double> calc;
 		while (polish_notation.size() != 0) {
-			if (polish_notation.front().gettype(polish_notation.front()) == 1) {
+			if (polish_notation.front().gettype(polish_notation.front()) == number) {
 				calc.push(polish_notation.front().getval(polish_notation.front()));
 				polish_notation.pop();
 			}
 			else if (polish_notation.front().gettype(polish_notation.front()) != 1) {
-				if (polish_notation.front().gettype(polish_notation.front()) == 9) {
+				if (polish_notation.front().gettype(polish_notation.front()) == sns) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -145,7 +145,7 @@ int main() {
 					calc.push(c);
 					polish_notation.pop();
 				}
-				else if (polish_notation.front().gettype(polish_notation.front()) == 10) {
+				else if (polish_notation.front().gettype(polish_notation.front()) == csn) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -153,7 +153,7 @@ int main() {
 					calc.push(c);
 					polish_notation.pop();
 				}
-				else if (polish_notation.front().gettype(polish_notation.front()) == 11) {
+				else if (polish_notation.front().gettype(polish_notation.front()) == tg) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -164,7 +164,7 @@ int main() {
 					calc.push(c);
 					polish_notation.pop();
 				}
-				else if (polish_notation.front().gettype(polish_notation.front()) == 12) {
+				else if (polish_notation.front().gettype(polish_notation.front()) == ctg) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -175,7 +175,7 @@ int main() {
 					calc.push(c);
 					polish_notation.pop();
 				}
-				else if (polish_notation.front().gettype(polish_notation.front()) == 13) {
+				else if (polish_notation.front().gettype(polish_notation.front()) == ln) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -192,7 +192,7 @@ int main() {
 					calc.push(c);
 					polish_notation.pop();
 				}
-				else if (polish_notation.front().gettype(polish_notation.front()) == 14) {
+				else if (polish_notation.front().gettype(polish_notation.front()) == lg) {
 					double b;
 					b = calc.top();
 					calc.pop();
@@ -210,22 +210,22 @@ int main() {
 					calc.pop();
 					b = calc.top();
 					calc.pop();
-					if (polish_notation.front().gettype(polish_notation.front()) == 2) {
+					if (polish_notation.front().gettype(polish_notation.front()) == add) {
 						double c;
 						c = a + b;
 						calc.push(c);
 					}
-					if (polish_notation.front().gettype(polish_notation.front()) == 3) {
+					if (polish_notation.front().gettype(polish_notation.front()) == sub) {
 						double c;
 						c = b - a;
 						calc.push(c);
 					}
-					if (polish_notation.front().gettype(polish_notation.front()) == 4) {
+					if (polish_notation.front().gettype(polish_notation.front()) == mul) {
 						double c;
 						c = a * b;
 						calc.push(c);
 					}
-					if (polish_notation.front().gettype(polish_notation.front()) == 5) {
+					if (polish_notation.front().gettype(polish_notation.front()) == dvs) {
 						double c;
 						if (a == 0) {
 							throw 'FALL';
@@ -233,7 +233,7 @@ int main() {
 						c = b / a;
 						calc.push(c);
 					}
-					if (polish_notation.front().gettype(polish_notation.front()) == 8) {
+					if (polish_notation.front().gettype(polish_notation.front()) == deg) {
 						double c;
 						c = pow(b, a);
 						calc.push(c);
