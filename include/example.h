@@ -4,79 +4,93 @@ using namespace std;
 enum Type{number, un_op, bin_op, lefts, rights, add, sub, mul, dvs, deg, sns, csn, ln, lg, tg, ctg};
 class Lexema {
 private:
-	Type type;//1-число, 2-плюс, 3-бинарный минус, 4-умножение, 5-деление, 6-лс, 7-пс
+	Type type;
 	int pr;
 	double val;
+	Type st;
 public:
 	Lexema() {
 		type = number;
-		pr = 9999;
 		val = 0;
+		st = number;
 	}
 	Lexema(double s) {
 		type = number;
-		pr = 9999;
 		val = s;
+		st = number;
 	}
 	Lexema(char s) {
 		if (s == 'e') {
 			type = number;
-			pr = 9999;
 			val = exp(1);
+			st = number;
 		}
 		if (s == '(') {
 			type = lefts;
 			pr = 99;
+			st = lefts;
 		}
 		else if (s == ')') {
 			type = rights;
 			pr = 99;
+			st = rights;
 		}
 		else if (s == '+') {
 			type = add;
 			pr = 4;
+			st = bin_op;
 		}
 		else if (s == '-') {
 			type = sub;
 			pr = 3;
+			st = bin_op;
 		}
 		else if (s == '*') {
 			type = mul;
 			pr = 2;
+			st = bin_op;
 		}
 		else if (s == '/') {
 			type = dvs;
 			pr = 2;
+			st = bin_op;
 		}
 		else if (s == '^') {
 			type = deg;
 			pr = 1;
+			st = bin_op;
 		}
 	}
 	Lexema(string s) {
 		if (s == "sin") {
 			type = sns;
 			pr = 0;
+			st = un_op;
 		}
 		if (s == "cos") {
 			type = csn;
 			pr = 0;
+			st = un_op;
 		}
 		if (s == "tg") {
 			type = tg;
 			pr = 0;
+			st = un_op;
 		}
 		if (s == "ctg") {
 			type = ctg;
 			pr = 0;
+			st = un_op;
 		}
 		if (s == "ln") {
 			type = ln;
 			pr = 0;
+			st = un_op;
 		}
 		if (s == "lg") {
 			type = lg;
 			pr = 0;
+			st = un_op;
 		}
 	}
 	Lexema& Lexema::operator=(const Lexema& v)
@@ -94,6 +108,9 @@ public:
 	}
 	int getpr(Lexema c) {
 		return c.pr;
+	}
+	Type getSt() {
+		return st;
 	}
 	friend std::ostream& operator<<(std::ostream& out, const Lexema& v)
 	{
@@ -142,36 +159,20 @@ public:
 		return out;
 	}
 };
-Type getSt(Lexema c) {
-	if (c.gettype(c) == add || c.gettype(c) == sub || c.gettype(c) == mul || c.gettype(c) == dvs || c.gettype(c) == deg) {
-		return bin_op;
-	}
-	else if (c.gettype(c) == sns || c.gettype(c) == csn || c.gettype(c) == tg || c.gettype(c) == ctg || c.gettype(c) == lg || c.gettype(c) == ln) {
-		return un_op;
-	}
-	else if (c.gettype(c) == lefts) {
-		return lefts;
-	}
-	else if (c.gettype(c) == rights) {
-		return rights;
-	}
-	else {
-		return number;
-	}
-}
+
 void chstring(Lexema* ar, int c) {
 	int scounter = 0;
 	int a = c;
 	int i = 0;
-	Type CurrentStatus;//0-start,1-number,2-un_op,3-bin_op,4-lefts,5-rights,6-end
+	Type CurrentStatus;
 	while (i < a) {
-		if (i == 0 && getSt(ar[i]) == un_op && i == a - 1) {
+		if (i == 0 && ar[i].getSt() == un_op && i == a - 1) {
 			throw 'FALL';
 		}
-		else if (i == 0 && (getSt(ar[i]) == number || getSt(ar[i])==un_op)) {
-			CurrentStatus = getSt(ar[i]);
+		else if (i == 0 && (ar[i].getSt() == number || ar[i].getSt()==un_op)) {
+			CurrentStatus = ar[i].getSt();
 		}
-		else if (i == 0 && getSt(ar[i]) == lefts) {
+		else if (i == 0 && ar[i].getSt() == lefts) {
 			scounter++;
 			CurrentStatus = lefts;
 		}
@@ -180,58 +181,58 @@ void chstring(Lexema* ar, int c) {
 		}
 		else if (i!=0) {
 			if (CurrentStatus == number) {
-				if ((getSt(ar[i]) == number) || (getSt(ar[i]) == lefts)) {
+				if ((ar[i].getSt() == number) && (ar[i].getSt() == lefts)) {
 					throw 'FALL';
 				}
-				else if (getSt(ar[i]) == rights) {
+				else if (ar[i].getSt() == rights) {
 					scounter--;
 					CurrentStatus = rights;
 				}
-				else if (getSt(ar[i]) == bin_op || getSt(ar[i])==un_op) {
-					CurrentStatus = getSt(ar[i]);
+				else if (ar[i].getSt() == bin_op || ar[i].getSt()==un_op) {
+					CurrentStatus = ar[i].getSt();
 				}
 			}
 			else if (CurrentStatus == bin_op) {
-				if (getSt(ar[i]) == bin_op || getSt(ar[i]) == rights) {
+				if (ar[i].getSt() == bin_op || ar[i].getSt() == rights) {
 					throw 'FALL';
 				}
-				else if (getSt(ar[i]) == lefts) {
+				else if (ar[i].getSt() == lefts) {
 					scounter++;
 					CurrentStatus = lefts;
 				}
 				else if (CurrentStatus == bin_op) {
-					CurrentStatus = getSt(ar[i]);
+					CurrentStatus = ar[i].getSt();
 				}
 			}
 			else if (CurrentStatus == lefts) {
-				if ((getSt(ar[i]) == bin_op || getSt(ar[i]) == rights)) {
+				if ((ar[i].getSt() == bin_op || ar[i].getSt() == rights)) {
 					throw 'FALL';
 				}
-				else if (getSt(ar[i]) == lefts) {
+				else if (ar[i].getSt() == lefts) {
 					scounter++;
 					CurrentStatus = lefts;
 				}
 				else if (CurrentStatus == lefts) {
-					CurrentStatus = getSt(ar[i]);
+					CurrentStatus = ar[i].getSt();
 				}
 			}
 			else if (CurrentStatus == rights) {
-				if (getSt(ar[i]) == lefts || getSt(ar[i]) == number) {
+				if (ar[i].getSt() == lefts || ar[i].getSt() == number) {
 					throw 'FALL';
 				}
-				else if (getSt(ar[i]) == rights) {
+				else if (ar[i].getSt() == rights) {
 					scounter--;
 					CurrentStatus = rights;
 				}
-				else if (getSt(ar[i])==bin_op) {
-					CurrentStatus = getSt(ar[i]);
+				else if (ar[i].getSt()==bin_op) {
+					CurrentStatus = ar[i].getSt();
 				}
 				else {
 					throw 'FALL';
 				}
 			}
 			else if (CurrentStatus == un_op) {
-				if (getSt(ar[i]) == lefts) {
+				if (ar[i].getSt() == lefts) {
 					scounter++;
 					CurrentStatus = lefts;
 				}
